@@ -2,7 +2,7 @@
 --Definition of the grammar
 
 --data T = TRUE | FALSE | ITE T T T | ZERO | Succ T | Pred T | Iszero T deriving Show
-data T = TRUE | FALSE | ITE T T T | ZERO | Succ T | Pred T | Iszero T deriving (Eq, Show)
+data T = TRUE | FALSE | ITE T T T | ZERO | Succ T | Pred T | Iszero T deriving Eq
 
 instance Show T where
 	show TRUE 	= "true"
@@ -10,8 +10,8 @@ instance Show T where
 	show (ITE c a b)= "if " ++ (show c) ++ " then " ++ (show a) ++ " else " ++ (show b)
 	show ZERO 	= "0"
 	show (Succ t) 	= "succ " ++ show t
-	show (Pred t) 	= "pred " ++ show t)
-	show (Iszero t) = "iszero " ++ t
+	show (Pred t) 	= "pred " ++ show t
+	show (Iszero t) = "iszero " ++ show t
 
 iszero :: T -> T
 iszero t = case t of
