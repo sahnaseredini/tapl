@@ -7,3 +7,16 @@ isnumericval t = case t of
 	TMZero -> True
 	TMSucc t1 -> isnumericval t1
 	otherwise -> False
+
+isval :: Term -> Bool
+isval t = case t of 
+	TMTrue -> True
+	TMFalse -> False
+	otherwise -> isnumericval t
+
+eval1 :: Term -> Term
+eval1 t = case t of 
+	
+
+
+	
