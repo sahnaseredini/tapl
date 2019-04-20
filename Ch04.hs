@@ -1,3 +1,5 @@
+module Ch04 where
+
 import Control.Monad 
 
 data Term = TMTrue | TMFalse | TMIf Term Term Term | TMZero | TMSucc Term | TMPred Term | TMIsZero Term |NoRuleApplies deriving (Show, Eq)
