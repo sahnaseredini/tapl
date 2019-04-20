@@ -1,8 +1,8 @@
-module TestSuite4 where
+module TestSuite7 where
 
-import Ch04
-import InputData4
-import ExpectedOutput4
+import Ch07
+import InputData7
+import ExpectedOutput7
 import Numeric (showIntAtBase)
 import Data.Char (intToDigit)
 import Data.List

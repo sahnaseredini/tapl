@@ -1,6 +1,6 @@
-module ExpectedOutput where
+module ExpectedOutput7 where
 
-import Ch04
+import Ch07
 
 allOutputs :: [Maybe Term]
 allOutputs = [test0, test1, test2, test3, test4, test5, test6, test7, test8, test9, test10]
