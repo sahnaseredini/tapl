@@ -13,7 +13,7 @@ pairs = zipWithM (,) list allOutputs
 output = foldl (\acc (x, y) -> (x == y) && acc) True pairs 
 outNum = calSteps 1 list allOutputs
 
---calSteps :: Int -> [Term] -> [Term] -> Int
+---calSteps :: Int -> [Term] -> [Term] -> Int
 calSteps step (l:list) (o:output)
 	| null output = if (l == o) then 0 else step
 	| otherwise = (calSteps (step*2) list output) + (if l == o then 0 else step)
