@@ -22,13 +22,13 @@ eval1 t = case t of
 	TMIf TMTrue a b 	-> Just a
 	TMIf TMFalse a b	-> Just b
 	TMIf c a b 		-> (liftM (\c1 -> TMIf c1 a b) (eval1 c)) >>= eval1
-	TMSucc t 		-> liftM (TMSucc) (eval1 t)
+	TMSucc t 		-> (liftM (TMSucc) (eval1 t)) >>= eval1
 	TMPred TMZero 		-> Just TMZero
 	TMPred (TMSucc nv)	-> if isnumericval nv then Just nv else Nothing
-	TMPred t 		-> liftM (TMPred) (eval1 t)
+	TMPred t 		-> (liftM (TMPred) (eval1 t)) >>= eval1
 	TMIsZero TMZero		-> Just TMTrue
 	TMIsZero (TMSucc nv) 	-> if isnumericval nv then Just TMFalse else Nothing
-	TMIsZero t 		-> liftM (TMIsZero) (eval1 t)
+	TMIsZero t 		-> (liftM (TMIsZero) (eval1 t)) >>= eval1
 	otherwise 		-> Nothing
 	
 eval :: Term -> Maybe Term 
