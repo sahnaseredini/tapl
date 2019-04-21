@@ -3,7 +3,7 @@ module Ch07 where
 import Control.Monad
 
 data Term = TMVar Int Int | TMAbs String Term | TMApp Term Term deriving Show
-type Context = [String]
+type Context = [String]  --We use Context to convert nameless forms of terms to named forms of terms and the other way round.
 
 printtm :: Context -> Term -> String
 printtm ctx t = case t of
