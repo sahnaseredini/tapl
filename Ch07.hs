@@ -40,7 +40,9 @@ isval ctx t = case t of
 eval1 :: Context -> Term -> Maybe Term
 eval1 ctx t = case t of
 	TMApp (TMAbs x t12) v2 	-> if isval ctx v2 then Just (termSubstTop v2 t12) else Nothing
-	TMApp t1 t2 		-> if isval ctx t1 then (liftM (TMApp t1) (eval1 ctx t2)) >>= eval1 ctx else (liftM ((flip TMApp) t2) (eval1 ctx t1)) >>= eval1 ctx 
+	TMApp t1 t2 		-> if isval ctx t1 then (liftM (TMApp t1) (eval1 ctx t2)) >>= eval1 ctx else (liftM ((flip TMApp) t2) (eval1 ctx t1))  
+	TMAbs x t1  		-> return (TMAbs x t1)
+	TMVar x n		-> return (TMVar x n)
         otherwise               -> Nothing
 
 
