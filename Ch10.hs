@@ -27,7 +27,7 @@ typeOf ctx t = case t of
 					if tyt2 == (typeOf ctx t3) then tyt2 
 					else Nothing
 				   else Nothing where tyt2 = typeOf ctx t2
-		TmVar i _ 	-> getTypeFromContext ctx i
+		TmVar i _ 	-> if i < length ctx then getTypeFromContext ctx i else Nothing
 		TmAbs x tyt1 t2	-> let ctx' = addbinding ctx x (VarBind tyt1) in 
 					do tyt2 <- typeOf ctx' t2
 					   return (TyArr tyt1 tyt2)
