@@ -36,3 +36,4 @@ typeOf ctx t = case t of
 				   	case tyt1 of 
 						TyArr tyt11 tyt12 -> if tyt2 == tyt11 then return tyt12 else Nothing
 						_ -> Nothing
+		_ 		-> Nothing
