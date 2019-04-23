@@ -5,8 +5,8 @@ import Control.Monad
 type Context = [(String, Binding)]
 
 data Binding = NameBind | VarBind Ty deriving (Show, Eq)
-data Ty = TyBool | TyArr Ty Ty | A | Unit deriving (Show, Eq)
-data Term = TmTrue | TmFalse | TmIf Term Term Term | TmVar Int Int | TmAbs String Ty Term | TmApp Term Term | Unit | As Term Ty | Let Term Term Term deriving (Show, Eq)
+data Ty = TyBool | TyArr Ty Ty | TyA | TyUnit deriving (Show, Eq)
+data Term = TmTrue | TmFalse | TmIf Term Term Term | TmVar Int Int | TmAbs String Ty Term | TmApp Term Term | TmUnit | TmAs Term Ty | TmLet String Term Term deriving (Show, Eq)
 
 addbinding :: Context -> String -> Binding -> Context
 addbinding ctx x bind = ((x, bind) : ctx)
@@ -36,5 +36,7 @@ typeOf ctx t = case t of
 				   	case tyt1 of 
 						TyArr tyt11 tyt12 -> if tyt2 == tyt11 then return tyt12 else Nothing
 						_ -> Nothing
-		As t1 _ 	-> typeOf ctx t1	
+		TmAs t1 _ 	-> typeOf ctx t1	
+		TmLet x t1 t2	-> do tyt1 <- typeOf ctx t1 
+				      typeOf ctx (TmApp (TmAbs x tyt1 t1) (t2))
 		_ 		-> Nothing
