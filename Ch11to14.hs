@@ -5,8 +5,36 @@ import Control.Monad
 type Context = [(String, Binding)]
 
 data Binding = NameBind | VarBind Ty deriving (Show, Eq)
-data Ty = TyBool | TyArr Ty Ty | TyA | TyUnit | TyPair Ty Ty | TyTuple [Ty] | TyRecord [(String, Ty)] | TySum SumT deriving (Show, Eq)
-data Term = TmTrue | TmFalse | TmIf Term Term Term | TmVar Int Int | TmAbs String Ty Term | TmApp Term Term | TmUnit | TmAs Term Ty | TmLet String Term Term | TmPair Term Term | TmTuple [Term] | TmRecord [(String, Term)] | TmSum Sum deriving (Show, Eq)
+data Ty = TyBool 
+	| TyArr Ty Ty 
+	| TyA 
+	| TyUnit 
+	| TyPair Ty Ty 
+	| TyTuple [Ty] 
+	| TyRecord [(String, Ty)] 
+	| TySum SumT 
+	| TyList Ty
+	deriving (Show, Eq)
+
+data Term = TmTrue 
+	| TmFalse 
+	| TmIf Term Term Term 
+	| TmVar Int Int 
+	| TmAbs String Ty Term 
+	| TmApp Term Term 
+	| TmUnit 
+	| TmAs Term Ty 
+	| TmLet String Term Term 
+	| TmPair Term Term 
+	| TmTuple [Term] 
+	| TmRecord [(String, Term)] 
+	| TmSum Sum 
+	| TmNil [Ty]
+	| TmCons [Ty] Term Term
+	| TmIsNil [Ty] Term
+	| TmHead [Ty] Term
+	| TmTail [Ty] Term
+	deriving (Show, Eq)
 
 data Sum = Inl Term | Inr Term deriving (Show, Eq)
 data SumT = InlT Ty | InrT Ty deriving (Show, Eq)
@@ -60,4 +88,12 @@ typeOf ctx t = case t of
 					Inr t1 	-> do tyt1 <- typeOf ctx t1
 						      return (TySum (InrT tyt1))
 					_	-> Nothing
+		TmIsNil [ty1] (TmNil [ty2]) -> return TyBool
+		TmIsNil [ty1] (TmCons [ty2] v1 v2) -> return TyBool
+		TmHead [ty1] (TmCons [ty2] v1 v2) -> typeOf ctx v1
+		TmTail [ty1] (TmCons [ty2] v1 v2) -> typeOf ctx v2
+		TmNil [ty1] 	-> return (TyList ty1)
+		TmCons [ty] t1 t2 -> do tyt1 <- typeOf ctx t1
+					tyt2 <- typeOf ctx t2
+					if (TyList tyt1 == tyt2) && tyt1 == ty then return tyt2 else Nothing
 		_ 		-> Nothing
