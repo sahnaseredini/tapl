@@ -5,8 +5,8 @@ import Control.Monad
 type Context = [(String, Binding)]
 
 data Binding = NameBind | VarBind Ty deriving (Show, Eq)
-data Ty = TyBool | TyArr Ty Ty | TyA | TyUnit deriving (Show, Eq)
-data Term = TmTrue | TmFalse | TmIf Term Term Term | TmVar Int Int | TmAbs String Ty Term | TmApp Term Term | TmUnit | TmAs Term Ty | TmLet String Term Term deriving (Show, Eq)
+data Ty = TyBool | TyArr Ty Ty | TyA | TyUnit | TyPair Ty Ty deriving (Show, Eq)
+data Term = TmTrue | TmFalse | TmIf Term Term Term | TmVar Int Int | TmAbs String Ty Term | TmApp Term Term | TmUnit | TmAs Term Ty | TmLet String Term Term | TmPair Term Term  deriving (Show, Eq)
 
 addbinding :: Context -> String -> Binding -> Context
 addbinding ctx x bind = ((x, bind) : ctx)
@@ -18,6 +18,14 @@ getTypeFromContext ctx i = case getbinding ctx i of
 
 getbinding :: Context -> Int -> Binding				
 getbinding ctx i = snd $ ctx !! i
+
+getFirst :: Term -> Term
+getFirst t = case t of 
+		TmPair t1 t2 -> t1
+
+getSecond :: Term -> Term
+getSecond t = case t of 
+		TmPair t1 t2 -> t2
 
 typeOf :: Context -> Term -> Maybe Ty
 typeOf ctx t = case t of 
@@ -39,4 +47,7 @@ typeOf ctx t = case t of
 		TmAs t1 _ 	-> typeOf ctx t1	
 		TmLet x t1 t2	-> do tyt1 <- typeOf ctx t1 
 				      typeOf ctx (TmApp (TmAbs x tyt1 t1) (t2))
+		TmPair t1 t2 	-> do tyt1 <- typeOf ctx t1
+				      tyt2 <- typeOf ctx t2
+				      return (TyPair tyt1 tyt2)
 		_ 		-> Nothing
