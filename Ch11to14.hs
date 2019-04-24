@@ -14,6 +14,7 @@ data Ty = TyBool
 	| TyRecord [(String, Ty)] 
 	| TySum SumT 
 	| TyList Ty
+	| TyError
 	deriving (Show, Eq)
 
 data Term = TmTrue 
@@ -34,10 +35,15 @@ data Term = TmTrue
 	| TmIsNil [Ty] Term
 	| TmHead [Ty] Term
 	| TmTail [Ty] Term
+	| TmError
+	| TmTry Term Term
+	| TmRaise Term
 	deriving (Show, Eq)
 
 data Sum = Inl Term | Inr Term deriving (Show, Eq)
+
 data SumT = InlT Ty | InrT Ty deriving (Show, Eq)
+
 data Pattern = Px | PRecord [(String, Pattern)] deriving (Show, Eq)
 
 addbinding :: Context -> String -> Binding -> Context
@@ -96,4 +102,8 @@ typeOf ctx t = case t of
 		TmCons [ty] t1 t2 -> do tyt1 <- typeOf ctx t1
 					tyt2 <- typeOf ctx t2
 					if (TyList tyt1 == tyt2) && tyt1 == ty then return tyt2 else Nothing
+		TmError 	-> TyError
+		TmTry t1 t2	-> do tyt1 <- typeOf ctx c1 
+				      tyt2 <- typeOf ctx t2 
+				      if tyt1 == tyt2 then tyt1 else Nothing
 		_ 		-> Nothing
