@@ -102,8 +102,8 @@ typeOf ctx t = case t of
 		TmCons [ty] t1 t2 -> do tyt1 <- typeOf ctx t1
 					tyt2 <- typeOf ctx t2
 					if (TyList tyt1 == tyt2) && tyt1 == ty then return tyt2 else Nothing
-		TmError 	-> TyError
-		TmTry t1 t2	-> do tyt1 <- typeOf ctx c1 
+		TmError 	-> return TyError
+		TmTry t1 t2	-> do tyt1 <- typeOf ctx t1 
 				      tyt2 <- typeOf ctx t2 
-				      if tyt1 == tyt2 then tyt1 else Nothing
+				      if tyt1 == tyt2 then return tyt1 else Nothing
 		_ 		-> Nothing
