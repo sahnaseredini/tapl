@@ -107,3 +107,5 @@ typeOf ctx t = case t of
 				      tyt2 <- typeOf ctx t2 
 				      if tyt1 == tyt2 then return tyt1 else Nothing
 		_ 		-> Nothing
+
+
