@@ -82,7 +82,7 @@ typeOf ctx t = case t of
 				   	case tyt1 of 
 						TyArr tyt11 tyt12 -> if tyt2 == tyt11 then return tyt12 else Nothing
 						_ -> Nothing
-		TmAs t1 _ 	-> typeOf ctx t1	
+		TmAs t1 tyt1 	-> return tyt1	
 		TmLet x t1 t2	-> do tyt1 <- typeOf ctx t1 
 				      typeOf ctx (TmApp (TmAbs x tyt1 t1) (t2))
 		TmPair t1 t2 	-> do tyt1 <- typeOf ctx t1
