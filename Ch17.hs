@@ -18,13 +18,11 @@ data Term = TmRecord [(String, Term)]
 	| TmApp Term Term 
 	deriving (Show, Eq)
 
+subtype :: Ty -> Ty -> Maybe Bool 
+subtype _ TyTop = return True
+subtype (TyArr tyS1 tyS2) (TyArr tyT1 tyT2) = liftM2 (&&) (subtype tyT1 tyS1) (subtype tyS2 tyT2)
 subtype tyS tyT 
-	-- | tyS == tyT || 
-	| tyT == TyTop = True
-	| otherwise = False
-subtyoe tyS tyT = case tyS of 
-			TyArr tyS1 tyS2 -> case tyT of 
-				TyArr tyT1 tyT2	-> (subtype tyT1 tyS1) && (subtype tyS2 tyT2)
-
+	| tyS == tyT = return True
+	| otherwise = return False
 
 
