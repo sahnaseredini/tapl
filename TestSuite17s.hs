@@ -8,7 +8,7 @@ import Data.Char (intToDigit)
 import Data.List
 import Control.Monad
 
-list = fmap subtype allTests
+list = fmap (\(x,y) -> (subtype x y)) allTests
 pairs = zipWith (,) (liftM show list) (liftM show allOutputs)
 output = foldl (\acc (x, y) -> (x == y) && acc) True pairs 
 outNum = calSteps 1 (liftM show list) (liftM show allOutputs)
