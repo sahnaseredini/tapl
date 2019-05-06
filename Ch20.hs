@@ -27,6 +27,7 @@ sumList :: NatList -> Int
 sumList Nil = 0
 sumList (Cons a l) = a + sumList l
 
-process a b = do 
+processFib a b = do 
 		print $ show a
-		process b (a+b)
+		processFib b (a+b)
+
